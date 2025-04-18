@@ -1,8 +1,18 @@
+import Column from "../components/Column"
+import styled from "styled-components"
+
+const Wrapper = styled.div`
+  display: flex;
+  gap: 1rem
+`
+
 const KanbanPage = () => {
   return (
-    <div>
-      <h1>Kanban Board</h1>
-    </div>
+    <Wrapper>
+      <Column status="Done" />
+      <Column status="ToDo" />
+      <Column status="InProgress" />
+    </Wrapper>
   )
 }
 

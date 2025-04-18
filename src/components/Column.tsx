@@ -9,3 +9,5 @@ const Column = ({ status }: ColumnProps) => {
     <h2>{status}</h2>
   )
 }
+
+export default Column
