@@ -6,7 +6,7 @@ interface TaskCardProps {
 }
 
 const TaskCardWrapper = styled.li`
-  
+width: 100%
 `
 const TaskCard = ({ task }: TaskCardProps) => {
   return (

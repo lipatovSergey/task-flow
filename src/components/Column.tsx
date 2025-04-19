@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import type { Task } from "../features/tasks/tasksTypes";
 import { statusLabels } from "../features/tasks/labels";
+import TaskCard from "./TaskCard";
 
 interface ColumnProps {
   status: Task["status"]
@@ -13,6 +14,7 @@ const ColumnTitle = styled.h2`
   text-align: center;
 `
 const ColumnWrapper = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 200px;
@@ -22,6 +24,8 @@ const ColumnWrapper = styled.div`
 `
 
 const TasksList = styled.ul`
+  padding: 0;
+  width: 100%;
   list-style: none;
 `
 
@@ -30,10 +34,7 @@ const Column = ({ status, tasks }: ColumnProps) => {
     <ColumnWrapper>
       <ColumnTitle>{statusLabels[status]}</ColumnTitle>
       <TasksList>{tasks.map(task => (
-        <li key={task.id}>
-          <p>{task.title}</p>
-          <p>{task.description}</p>
-        </li>
+        <TaskCard key={task.id} task={task} />
       ))}</TasksList>
     </ColumnWrapper>
   )
