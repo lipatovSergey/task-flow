@@ -30,12 +30,16 @@ const TasksList = styled.ul`
 `
 
 const Column = ({ status, tasks }: ColumnProps) => {
+
+  const sortedTasks = [...tasks].sort((a, b) => a.priority - b.priority)
+
   return (
     <ColumnWrapper>
       <ColumnTitle>{statusLabels[status]}</ColumnTitle>
-      <TasksList>{tasks.map(task => (
+      <TasksList>{sortedTasks.map(task => (
         <TaskCard key={task.id} task={task} />
-      ))}</TasksList>
+      ))}
+      </TasksList>
     </ColumnWrapper>
   )
 }
