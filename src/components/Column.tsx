@@ -3,6 +3,7 @@ import type { Task } from "../features/tasks/tasksTypes";
 
 interface ColumnProps {
   status: Task["status"]
+  tasks: Task[]
 }
 
 const ColumnTitle = styled.h2`
@@ -19,10 +20,19 @@ const ColumnWrapper = styled.div`
   border-radius: 0.5rem;
 `
 
-const Column = ({ status }: ColumnProps) => {
+const TasksList = styled.ul`
+`
+
+const Column = ({ status, tasks }: ColumnProps) => {
   return (
     <ColumnWrapper>
       <ColumnTitle>{status}</ColumnTitle>
+      <TasksList>{tasks.map(task => (
+        <li key={task.id}>
+          <p>{task.title}</p>
+          <p>{task.description}</p>
+        </li>
+      ))}</TasksList>
     </ColumnWrapper>
   )
 }
