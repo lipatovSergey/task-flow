@@ -1,5 +1,7 @@
 import Column from "../components/Column"
 import styled from "styled-components"
+import { mockTasks } from "../features/tasks/mockData"
+import { Task } from "../features/tasks/tasksTypes"
 
 const Section = styled.section`
   width: 1200px;
@@ -12,14 +14,19 @@ const Wrapper = styled.div`
   justify-content: space-between;
   gap: 1rem;
 `
+const statuses: Task["status"][] = ["ToDo", "InProgress", "Done"]
 
 const KanbanPage = () => {
   return (
     <Section>
       <Wrapper>
-        <Column status="Done" />
-        <Column status="ToDo" />
-        <Column status="InProgress" />
+        {statuses.map(status => (
+          <Column
+            key={status}
+            status={status}
+            tasks={mockTasks.filter((task) => task.status === status)}
+          />
+        ))}
       </Wrapper>
     </Section>
   )
