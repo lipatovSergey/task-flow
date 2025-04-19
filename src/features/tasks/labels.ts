@@ -1,5 +1,5 @@
 export const statusLabels = {
-  ToDO: 'To Do',
+  ToDo: 'To Do',
   InProgress: 'In Progress',
   Done: 'Done'
 }

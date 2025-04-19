@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import type { Task } from "../features/tasks/tasksTypes";
+import { statusLabels } from "../features/tasks/labels";
 
 interface ColumnProps {
   status: Task["status"]
@@ -21,12 +22,13 @@ const ColumnWrapper = styled.div`
 `
 
 const TasksList = styled.ul`
+  list-style: none;
 `
 
 const Column = ({ status, tasks }: ColumnProps) => {
   return (
     <ColumnWrapper>
-      <ColumnTitle>{status}</ColumnTitle>
+      <ColumnTitle>{statusLabels[status]}</ColumnTitle>
       <TasksList>{tasks.map(task => (
         <li key={task.id}>
           <p>{task.title}</p>
