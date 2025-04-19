@@ -2,6 +2,7 @@ import Column from "../components/Column"
 import styled from "styled-components"
 import { mockTasks } from "../features/tasks/mockData"
 import { Task } from "../features/tasks/tasksTypes"
+import { useState } from "react"
 
 const Section = styled.section`
   width: 1200px;
@@ -17,9 +18,12 @@ const Wrapper = styled.div`
 const statuses: Task["status"][] = ["ToDo", "InProgress", "Done"]
 
 const KanbanPage = () => {
+  const [isAddTaskFormOpen, setIsAddTaskFormOpen] = useState(false)
+
   return (
     <Section>
       <Wrapper>
+        <button onClick={() => setIsAddTaskFormOpen(true)}>Add Task</button>
         {statuses.map(status => (
           <Column
             key={status}
