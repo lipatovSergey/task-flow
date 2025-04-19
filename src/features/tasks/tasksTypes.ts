@@ -4,5 +4,5 @@ export interface Task {
   description: string
   status: "ToDo" | "InProgress" | "Done"
   createdAt: Date
-  priority: "high" | "regular" | "low"
+  priority: 1 | 2 | 3
 }
