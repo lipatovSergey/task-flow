@@ -40,30 +40,50 @@ const CloseModalBtn = styled.button`
   right: -10px;
   top: -10px;
 `
-const TaskForm = ({ isOpen, setIsOpen }: TaskFormProps) => {
+const TaskForm = ({ isOpen, setIsOpen, onTaskAdd }: TaskFormProps) => {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
 
-    const title = formData.get("title")
-    const description = formData.get("description")
+    const title = formData.get("title") as string
+    const description = formData.get("description") as string
+    const status = formData.get("status") as Task["status"]
+    const priority = Number(formData.get("priority")) as Task["priority"]
+    const newTask: Task = {
+      id: crypto.randomUUID(),
+      title,
+      description,
+      status,
+      priority,
+      createdAt: new Date(),
+    }
+
+    onTaskAdd(newTask)
+    setIsOpen(false)
   }
+
   return (
     <BackDrop >
-      <TaskFormModal onBlur={() => setIsOpen(false)}>
-        <Form>
+      <TaskFormModal>
+        <Form onSubmit={handleFormSubmit}>
           <label htmlFor="title">Title</label>
           <input name="title" id="title" />
           <label htmlFor="description">Description</label>
           <input name="description" />
-          <label htmlFor="status"></label>
+          <label htmlFor="status">Status</label>
           <select name="status" id="status">
             <option value="ToDo">To Do</option>
             <option value="InProgress">In Progress</option>
             <option value="Done">Done</option>
           </select>
-          <button >Add Task</button>
+          <label htmlFor="priority">Priority</label>
+          <select name="priority" id="priority">
+            <option value='1'>High</option>
+            <option value='2'>Regular</option>
+            <option value='3'>Low</option>
+          </select>
+          <button>Add Task</button>
         </Form>
         <CloseModalBtn onClick={() => setIsOpen(false)}>X</CloseModalBtn>
       </TaskFormModal>
