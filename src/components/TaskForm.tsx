@@ -1,9 +1,11 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import styled from "styled-components"
+import type { Task } from "../features/tasks/tasksTypes";
 
 interface TaskFormProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onTaskAdd: (task: Task) => void;
 }
 
 const BackDrop = styled.div`
@@ -20,6 +22,7 @@ const BackDrop = styled.div`
 `
 
 const TaskFormModal = styled.div`
+  position: relative;
   background-color: white;
   border-radius: 8px;
   max-width: 500px;
@@ -32,18 +35,37 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
 `
+const CloseModalBtn = styled.button`
+  position: absolute;
+  right: -10px;
+  top: -10px;
+`
 const TaskForm = ({ isOpen, setIsOpen }: TaskFormProps) => {
 
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+
+    const title = formData.get("title")
+    const description = formData.get("description")
+  }
   return (
-    <BackDrop onClick={() => setIsOpen(false)}>
-      <TaskFormModal>
+    <BackDrop >
+      <TaskFormModal onBlur={() => setIsOpen(false)}>
         <Form>
           <label htmlFor="title">Title</label>
           <input name="title" id="title" />
           <label htmlFor="description">Description</label>
           <input name="description" />
-          <button>Add Task</button>
+          <label htmlFor="status"></label>
+          <select name="status" id="status">
+            <option value="ToDo">To Do</option>
+            <option value="InProgress">In Progress</option>
+            <option value="Done">Done</option>
+          </select>
+          <button >Add Task</button>
         </Form>
+        <CloseModalBtn onClick={() => setIsOpen(false)}>X</CloseModalBtn>
       </TaskFormModal>
     </BackDrop>
 

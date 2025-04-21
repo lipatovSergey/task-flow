@@ -20,17 +20,21 @@ const statuses: Task["status"][] = ["ToDo", "InProgress", "Done"]
 
 const KanbanPage = () => {
   const [isAddTaskFormOpen, setIsAddTaskFormOpen] = useState(false)
+  const [tasks, setTasks] = useState(mockTasks)
 
+  const addTask = (task: Task) => {
+    setTasks(prev => [...prev, task])
+  }
   return (
     <Section>
       <Wrapper>
         <button onClick={() => setIsAddTaskFormOpen(true)}>Add Task</button>
-        {isAddTaskFormOpen && <TaskForm isOpen={isAddTaskFormOpen} setIsOpen={setIsAddTaskFormOpen} />}
+        {isAddTaskFormOpen && <TaskForm isOpen={isAddTaskFormOpen} setIsOpen={setIsAddTaskFormOpen} onTaskAdd={addTask} />}
         {statuses.map(status => (
           <Column
             key={status}
             status={status}
-            tasks={mockTasks.filter((task) => task.status === status)}
+            tasks={tasks.filter((task) => task.status === status)}
           />
         ))}
       </Wrapper>
