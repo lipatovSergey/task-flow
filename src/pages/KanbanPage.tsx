@@ -46,6 +46,11 @@ const KanbanPage = () => {
   const addTask = (task: Task) => {
     setTasks(prev => [...prev, task])
   }
+
+  const deleteTask = (id: Task["id"]) => {
+    setTasks(prev => prev.filter((t) => t.id !== id))
+  }
+
   return (
     <Section>
       <Wrapper>
