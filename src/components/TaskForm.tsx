@@ -44,6 +44,10 @@ const Form = styled.form`
   .fields :is(input, select):not(:last-child) {
     margin-bottom: 8px;
   }
+
+  button {
+    margin-top: 16px;
+  }
 `
 const CloseModalBtn = styled.button`
   position: absolute;
@@ -125,28 +129,27 @@ const TaskForm = ({ isOpen, setIsOpen, onTaskAdd }: TaskFormProps) => {
         <Form onSubmit={handleFormSubmit}>
           <div className="fields">
             <label htmlFor="title">Title</label>
-            <input name="title" id="title" />
             {errors.title && <ErrorSpan>{errors.title}</ErrorSpan>}
+            <input name="title" id="title" />
             <label htmlFor="description">Description</label>
-            <input name="description" />
             {errors.description && <ErrorSpan>{errors.description}</ErrorSpan>}
+            <input name="description" />
             <label htmlFor="status">Status</label>
+            {errors.status && <ErrorSpan>{errors.status}</ErrorSpan>}
             <select name="status" id="status">
               <option value="ToDo">To Do</option>
               <option value="InProgress">In Progress</option>
               <option value="Done">Done</option>
             </select>
-            {errors.status && <ErrorSpan>{errors.status}</ErrorSpan>}
             <label htmlFor="priority">Priority</label>
+            {errors.priority && <ErrorSpan>{errors.priority}</ErrorSpan>}
             <select name="priority" id="priority">
               <option value='1'>High</option>
               <option value='2'>Regular</option>
               <option value='3'>Low</option>
             </select>
-            {errors.priority && <ErrorSpan>{errors.priority}</ErrorSpan>}
           </div>
           <button>Add Task</button>
-
         </Form>
         <CloseModalBtn onClick={() => setIsOpen(false)}>X</CloseModalBtn>
       </TaskFormModal>
