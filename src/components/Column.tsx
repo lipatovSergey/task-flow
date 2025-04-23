@@ -6,6 +6,7 @@ import TaskCard from "./TaskCard";
 interface ColumnProps {
   status: Task["status"]
   tasks: Task[]
+  onDelete: (id: Task["id"]) => void
 }
 
 const ColumnTitle = styled.h2`
@@ -29,7 +30,7 @@ const TasksList = styled.ul`
   list-style: none;
 `
 
-const Column = ({ status, tasks }: ColumnProps) => {
+const Column = ({ status, tasks, onDelete }: ColumnProps) => {
 
   const sortedTasks = [...tasks].sort((a, b) => a.priority - b.priority)
 
@@ -37,7 +38,7 @@ const Column = ({ status, tasks }: ColumnProps) => {
     <ColumnWrapper>
       <ColumnTitle>{statusLabels[status]}</ColumnTitle>
       <TasksList>{sortedTasks.map(task => (
-        <TaskCard key={task.id} task={task} />
+        <TaskCard key={task.id} task={task} onDelete={onDelete} />
       ))}
       </TasksList>
     </ColumnWrapper>

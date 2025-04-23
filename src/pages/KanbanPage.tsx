@@ -61,6 +61,7 @@ const KanbanPage = () => {
             key={status}
             status={status}
             tasks={tasks.filter((task) => task.status === status)}
+            onDelete={deleteTask}
           />
         ))}
       </Wrapper>
