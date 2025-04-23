@@ -23,6 +23,7 @@ const BackDrop = styled.div`
 
 const TaskFormModal = styled.div`
   position: relative;
+  padding: 8px;
   background-color: white;
   border-radius: 8px;
   max-width: 500px;
@@ -34,6 +35,15 @@ const TaskFormModal = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+
+  .fields {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fields :is(input, select):not(:last-child) {
+    margin-bottom: 8px;
+  }
 `
 const CloseModalBtn = styled.button`
   position: absolute;
@@ -67,7 +77,7 @@ const TaskForm = ({ isOpen, setIsOpen, onTaskAdd }: TaskFormProps) => {
     const newErrors = { title: '', description: '', status: '', priority: '' }
 
     if (!title.trim()) {
-      newErrors.title = "Tittle is required"
+      newErrors.title = "Title is required"
     }
 
     if (!description.trim()) {
@@ -99,6 +109,13 @@ const TaskForm = ({ isOpen, setIsOpen, onTaskAdd }: TaskFormProps) => {
     }
 
     onTaskAdd(newTask)
+    // reset errors
+    setErrors({
+      title: '',
+      description: '',
+      status: '',
+      priority: '',
+    })
     setIsOpen(false)
   }
 
@@ -106,27 +123,30 @@ const TaskForm = ({ isOpen, setIsOpen, onTaskAdd }: TaskFormProps) => {
     <BackDrop >
       <TaskFormModal>
         <Form onSubmit={handleFormSubmit}>
-          <label htmlFor="title">Title</label>
-          <input name="title" id="title" />
-          {errors.title && <ErrorSpan>{errors.title}</ErrorSpan>}
-          <label htmlFor="description">Description</label>
-          <input name="description" />
-          {errors.description && <ErrorSpan>{errors.description}</ErrorSpan>}
-          <label htmlFor="status">Status</label>
-          <select name="status" id="status">
-            <option value="ToDo">To Do</option>
-            <option value="InProgress">In Progress</option>
-            <option value="Done">Done</option>
-          </select>
-          {errors.status && <ErrorSpan>{errors.status}</ErrorSpan>}
-          <label htmlFor="priority">Priority</label>
-          <select name="priority" id="priority">
-            <option value='1'>High</option>
-            <option value='2'>Regular</option>
-            <option value='3'>Low</option>
-          </select>
-          {errors.priority && <ErrorSpan>{errors.priority}</ErrorSpan>}
+          <div className="fields">
+            <label htmlFor="title">Title</label>
+            <input name="title" id="title" />
+            {errors.title && <ErrorSpan>{errors.title}</ErrorSpan>}
+            <label htmlFor="description">Description</label>
+            <input name="description" />
+            {errors.description && <ErrorSpan>{errors.description}</ErrorSpan>}
+            <label htmlFor="status">Status</label>
+            <select name="status" id="status">
+              <option value="ToDo">To Do</option>
+              <option value="InProgress">In Progress</option>
+              <option value="Done">Done</option>
+            </select>
+            {errors.status && <ErrorSpan>{errors.status}</ErrorSpan>}
+            <label htmlFor="priority">Priority</label>
+            <select name="priority" id="priority">
+              <option value='1'>High</option>
+              <option value='2'>Regular</option>
+              <option value='3'>Low</option>
+            </select>
+            {errors.priority && <ErrorSpan>{errors.priority}</ErrorSpan>}
+          </div>
           <button>Add Task</button>
+
         </Form>
         <CloseModalBtn onClick={() => setIsOpen(false)}>X</CloseModalBtn>
       </TaskFormModal>
