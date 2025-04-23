@@ -2,7 +2,7 @@ import Column from "../components/Column"
 import styled from "styled-components"
 import { mockTasks } from "../features/tasks/mockData"
 import { Task } from "../features/tasks/tasksTypes"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import TaskForm from "../components/TaskForm"
 
 const Section = styled.section`
@@ -21,6 +21,27 @@ const statuses: Task["status"][] = ["ToDo", "InProgress", "Done"]
 const KanbanPage = () => {
   const [isAddTaskFormOpen, setIsAddTaskFormOpen] = useState(false)
   const [tasks, setTasks] = useState(mockTasks)
+  // on first render check if there any tasks in localStorage
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks")
+    if (savedTasks) {
+      try {
+        const parsed = JSON.parse(savedTasks)
+        // date saved as string, must get it back to Date
+        const restored = parsed.map((t: Task) => ({
+          ...t,
+          createdAt: new Date(t.createdAt)
+        }))
+        setTasks(restored)
+      } catch {
+        console.error("Failed to parse tasks from localStorage")
+      }
+    }
+  }, [])
+  // on every change in tasks save to localStorage
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks))
+  }, [tasks])
 
   const addTask = (task: Task) => {
     setTasks(prev => [...prev, task])
