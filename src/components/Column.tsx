@@ -8,7 +8,7 @@ interface ColumnProps {
   status: Task["status"];
   tasks: Task[];
   onDelete: (id: Task["id"]) => void;
-  activeCardId: string;
+  activeCardId: string | null;
   setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 

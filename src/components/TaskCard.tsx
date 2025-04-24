@@ -3,11 +3,10 @@ import styled from "styled-components";
 import type { Task } from "../features/tasks/tasksTypes";
 
 interface TaskCardProps {
-  task: Task
-  onDelete: (id: Task["id"]) => void
-  activeCardId: string
-  setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>
-
+  task: Task;
+  onDelete: (id: Task["id"]) => void;
+  activeCardId: string | null;
+  setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const TaskCardWrapper = styled.li`
@@ -16,12 +15,12 @@ const TaskCardWrapper = styled.li`
   &:not(:last-child) {
     margin-bottom: 8px;
   }
-`
+`;
 const TaskCardContent = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #0cb8ca;
-  padding: 8px 8px; 
+  padding: 8px 8px;
   border-radius: 8px;
 
   h3 {
@@ -37,7 +36,7 @@ const TaskCardContent = styled.div`
   span {
     text-align: right;
   }
-`
+`;
 const BtnsWrapper = styled.div`
   position: absolute;
   top: -8px;
@@ -53,13 +52,13 @@ const BtnsWrapper = styled.div`
   button:not(:last-child) {
     margin-right: 8px;
   }
-`
+`;
 
 const TaskCard = ({ task, onDelete }: TaskCardProps) => {
-  const [isBtnsVisible, setIsBtnsVisible] = useState(false)
+  const [isBtnsVisible, setIsBtnsVisible] = useState(false);
   const handleDeleteBtnClick = () => {
-    onDelete(task.id)
-  }
+    onDelete(task.id);
+  };
 
   return (
     <TaskCardWrapper onClick={() => setIsBtnsVisible(true)}>
@@ -68,13 +67,16 @@ const TaskCard = ({ task, onDelete }: TaskCardProps) => {
         <p>{task.description}</p>
         <span>{task.createdAt.toLocaleString()}</span>
       </TaskCardContent>
-      {isBtnsVisible && <BtnsWrapper>
-        <button type="button">✏️</button>
-        <button type="button" onClick={handleDeleteBtnClick}>❌</button>
-      </BtnsWrapper>
-      }
+      {isBtnsVisible && (
+        <BtnsWrapper>
+          <button type="button">✏️</button>
+          <button type="button" onClick={handleDeleteBtnClick}>
+            ❌
+          </button>
+        </BtnsWrapper>
+      )}
     </TaskCardWrapper>
-  )
-}
+  );
+};
 
-export default TaskCard
+export default TaskCard;

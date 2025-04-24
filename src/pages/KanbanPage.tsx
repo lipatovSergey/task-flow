@@ -1,75 +1,94 @@
-import Column from "../components/Column"
-import styled from "styled-components"
-import { mockTasks } from "../features/tasks/mockData"
-import { Task } from "../features/tasks/tasksTypes"
-import { useState, useEffect } from "react"
-import TaskForm from "../components/TaskForm"
+import Column from "../components/Column";
+import styled from "styled-components";
+import { mockTasks } from "../features/tasks/mockData";
+import { Task } from "../features/tasks/tasksTypes";
+import { useState, useEffect } from "react";
+import TaskForm from "../components/TaskForm";
 
 const Section = styled.section`
   width: 1200px;
   margin: 0 auto;
-`
+`;
 
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-`
-const statuses: Task["status"][] = ["ToDo", "InProgress", "Done"]
+`;
+const statuses: Task["status"][] = ["ToDo", "InProgress", "Done"];
 
 const KanbanPage = () => {
-  const [isAddTaskFormOpen, setIsAddTaskFormOpen] = useState(false)
-  const [tasks, setTasks] = useState(mockTasks)
-  const [activeCardId, setActiveCardId] = useState<string | null>(null)
+  const [isAddTaskFormOpen, setIsAddTaskFormOpen] = useState(false);
+  const [tasks, setTasks] = useState(mockTasks);
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   // on first render check if there any tasks in localStorage
   useEffect(() => {
-    const savedTasks = localStorage.getItem("tasks")
+    const savedTasks = localStorage.getItem("tasks");
     if (savedTasks) {
       try {
-        const parsed = JSON.parse(savedTasks)
+        const parsed = JSON.parse(savedTasks);
         // date saved as string, must get it back to Date
         const restored = parsed.map((t: Task) => ({
           ...t,
-          createdAt: new Date(t.createdAt)
-        }))
-        setTasks(restored)
+          createdAt: new Date(t.createdAt),
+        }));
+        setTasks(restored);
       } catch {
-        console.error("Failed to parse tasks from localStorage")
+        console.error("Failed to parse tasks from localStorage");
       }
     }
-  }, [])
+  }, []);
 
   // on every change in tasks save to localStorage
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks))
-  }, [tasks])
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  // global eventListener for clicks outside of activeCardId
+  useEffect(() => {
+    const handleOutsideClick = () => {
+      setActiveCardId(null);
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    // clean up function guarantee that every listener will be removed on component unmount
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
 
   const addTask = (task: Task) => {
-    setTasks(prev => [...prev, task])
-  }
+    setTasks((prev) => [...prev, task]);
+  };
 
   const deleteTask = (id: Task["id"]) => {
-    setTasks(prev => prev.filter((t) => t.id !== id))
-  }
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+  };
 
   return (
     <Section>
       <Wrapper>
         <button onClick={() => setIsAddTaskFormOpen(true)}>Add Task</button>
-        {isAddTaskFormOpen && <TaskForm isOpen={isAddTaskFormOpen} setIsOpen={setIsAddTaskFormOpen} onTaskAdd={addTask} />}
-        {statuses.map(status => (
+        {isAddTaskFormOpen && (
+          <TaskForm
+            isOpen={isAddTaskFormOpen}
+            setIsOpen={setIsAddTaskFormOpen}
+            onTaskAdd={addTask}
+          />
+        )}
+        {statuses.map((status) => (
           <Column
             key={status}
             status={status}
             tasks={tasks.filter((task) => task.status === status)}
             onDelete={deleteTask}
+            activeCardId={activeCardId}
+            setActiveCardId={setActiveCardId}
           />
         ))}
       </Wrapper>
     </Section>
-  )
-}
+  );
+};
 
-export default KanbanPage
+export default KanbanPage;
