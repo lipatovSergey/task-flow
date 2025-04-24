@@ -20,13 +20,14 @@ const statuses: Task["status"][] = ["ToDo", "InProgress", "Done"];
 
 const KanbanPage = () => {
   const [isAddTaskFormOpen, setIsAddTaskFormOpen] = useState(false);
-  const [tasks, setTasks] = useState(mockTasks);
+  const [tasks, setTasks] = useState<Task[] | null>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   // on first render check if there any tasks in localStorage
   useEffect(() => {
     const savedTasks = localStorage.getItem("tasks");
     if (savedTasks) {
+      console.log(savedTasks);
       try {
         const parsed = JSON.parse(savedTasks);
         // date saved as string, must get it back to Date
@@ -38,12 +39,16 @@ const KanbanPage = () => {
       } catch {
         console.error("Failed to parse tasks from localStorage");
       }
+    } else {
+      setTasks(mockTasks);
     }
   }, []);
 
   // on every change in tasks save to localStorage
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    if (tasks !== null) {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
   }, [tasks]);
 
   // global eventListener for clicks outside of activeCardId
@@ -58,13 +63,15 @@ const KanbanPage = () => {
   }, []);
 
   const addTask = (task: Task) => {
-    setTasks((prev) => [...prev, task]);
+    setTasks((prev) => (prev ? [...prev, task] : [task]));
   };
 
   const deleteTask = (id: Task["id"]) => {
-    setTasks((prev) => prev.filter((t) => t.id !== id));
+    console.log(id);
+    setTasks((prev) => (prev ? prev.filter((t) => t.id !== id) : prev));
   };
 
+  console.log(activeCardId);
   return (
     <Section>
       <Wrapper>
@@ -80,7 +87,9 @@ const KanbanPage = () => {
           <Column
             key={status}
             status={status}
-            tasks={tasks.filter((task) => task.status === status)}
+            tasks={
+              tasks ? tasks.filter((task) => task.status === status) : null
+            }
             onDelete={deleteTask}
             activeCardId={activeCardId}
             setActiveCardId={setActiveCardId}
