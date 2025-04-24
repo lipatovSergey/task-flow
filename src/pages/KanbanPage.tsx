@@ -21,6 +21,8 @@ const statuses: Task["status"][] = ["ToDo", "InProgress", "Done"]
 const KanbanPage = () => {
   const [isAddTaskFormOpen, setIsAddTaskFormOpen] = useState(false)
   const [tasks, setTasks] = useState(mockTasks)
+  const [activeCardId, setActiveCardId] = useState<string | null>(null)
+
   // on first render check if there any tasks in localStorage
   useEffect(() => {
     const savedTasks = localStorage.getItem("tasks")
@@ -38,6 +40,7 @@ const KanbanPage = () => {
       }
     }
   }, [])
+
   // on every change in tasks save to localStorage
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks))

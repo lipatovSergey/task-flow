@@ -5,6 +5,9 @@ import type { Task } from "../features/tasks/tasksTypes";
 interface TaskCardProps {
   task: Task
   onDelete: (id: Task["id"]) => void
+  activeCardId: string
+  setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>
+
 }
 
 const TaskCardWrapper = styled.li`
