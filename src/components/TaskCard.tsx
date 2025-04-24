@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 import type { Task } from "../features/tasks/tasksTypes";
 
@@ -16,6 +15,7 @@ const TaskCardWrapper = styled.li`
     margin-bottom: 8px;
   }
 `;
+
 const TaskCardContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,6 +37,7 @@ const TaskCardContent = styled.div`
     text-align: right;
   }
 `;
+
 const BtnsWrapper = styled.div`
   position: absolute;
   top: -8px;
@@ -54,23 +55,40 @@ const BtnsWrapper = styled.div`
   }
 `;
 
-const TaskCard = ({ task, onDelete }: TaskCardProps) => {
-  const [isBtnsVisible, setIsBtnsVisible] = useState(false);
+const TaskCard = ({
+  task,
+  onDelete,
+  activeCardId,
+  setActiveCardId,
+}: TaskCardProps) => {
   const handleDeleteBtnClick = () => {
     onDelete(task.id);
   };
 
   return (
-    <TaskCardWrapper onClick={() => setIsBtnsVisible(true)}>
+    <TaskCardWrapper
+      // must stop propagation, because of global listener. Without it global listener will work before onClick inside component
+      onMouseDown={(e) => e.stopPropagation()}
+      onClick={() => {
+        if (activeCardId !== task.id) {
+          setActiveCardId(task.id);
+        }
+      }}
+    >
       <TaskCardContent>
         <h3>{task.title}</h3>
         <p>{task.description}</p>
         <span>{task.createdAt.toLocaleString()}</span>
       </TaskCardContent>
-      {isBtnsVisible && (
+      {task.id === activeCardId && (
         <BtnsWrapper>
           <button type="button">✏️</button>
-          <button type="button" onClick={handleDeleteBtnClick}>
+          <button
+            type="button"
+            // must stop propagation, because of global listener. Without it global listener will work before onClick inside component
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={handleDeleteBtnClick}
+          >
             ❌
           </button>
         </BtnsWrapper>

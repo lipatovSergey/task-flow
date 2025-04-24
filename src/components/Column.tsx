@@ -6,7 +6,7 @@ import React from "react";
 
 interface ColumnProps {
   status: Task["status"];
-  tasks: Task[];
+  tasks: Task[] | null;
   onDelete: (id: Task["id"]) => void;
   activeCardId: string | null;
   setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>;
@@ -40,23 +40,24 @@ const Column = ({
   activeCardId,
   setActiveCardId,
 }: ColumnProps) => {
-  const sortedTasks = [...tasks].sort((a, b) => a.priority - b.priority);
-
   return (
     <ColumnWrapper>
       <ColumnTitle>{statusLabels[status]}</ColumnTitle>
-      <TasksList>
-        {sortedTasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onDelete={onDelete}
-            activeCardId={activeCardId}
-            setActiveCardId={setActiveCardId}
-          />
-        ))}
-      </TasksList>
-      <div></div>
+      {tasks && (
+        <TasksList>
+          {tasks
+            .sort((a, b) => a.priority - b.priority)
+            .map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                onDelete={onDelete}
+                activeCardId={activeCardId}
+                setActiveCardId={setActiveCardId}
+              />
+            ))}
+        </TasksList>
+      )}
     </ColumnWrapper>
   );
 };
