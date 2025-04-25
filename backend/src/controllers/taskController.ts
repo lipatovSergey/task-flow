@@ -1,15 +1,8 @@
-import { Request, Response, NextFunction, RequestHandler } from "express";
+import { Request, Response, NextFunction } from "express";
 import { tasks, Task } from "../models/task";
+import crypto from "crypto";
 
-export const getTasks: RequestHandler = (req, res, next) => {
-  try {
-    res.json(tasks);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const createTask: RequestHandler = (req, res, next) => {
+export const createTask = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { title, description, status, priority } = req.body;
 
@@ -35,35 +28,17 @@ export const createTask: RequestHandler = (req, res, next) => {
   }
 };
 
-export const updateTask: RequestHandler = (req, res, next) => {
+export const getTasks = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params;
-    const { title, description, status, priority } = req.body;
-
-    const task = tasks.find((t) => t.id === id);
-    if (!task) {
-      res.status(404).json({ message: "Task not found" });
-      return;
-    }
-
-    if (!title || !description || !status || !priority) {
-      res.status(400).json({ message: "Missing required fields" });
-    }
-
-    if (title) task.title = title;
-    if (description) task.description = description;
-    if (status) task.status = status;
-    if (priority) task.priority = priority;
-
-    res.json(task);
+    res.json(tasks);
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteTask: RequestHandler = (req, res, next) => {
+export const deleteTask = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id;
     const index = tasks.findIndex((t) => t.id === id);
 
     if (index === -1) {
@@ -71,8 +46,36 @@ export const deleteTask: RequestHandler = (req, res, next) => {
       return;
     }
 
-    const deleted = tasks.splice(index, 1)[0];
-    res.json(deleted);
+    tasks.splice(index, 1);
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateTask = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = req.params.id;
+    const { title, description, status, priority } = req.body;
+
+    const task = tasks.find((t) => t.id === id);
+
+    if (!task) {
+      res.status(404).json({ message: "Task not found" });
+      return;
+    }
+
+    if (!title || !description || !status || !priority) {
+      res.status(400).json({ message: "Missing required fields" });
+      return;
+    }
+
+    task.title = title;
+    task.description = description;
+    task.status = status;
+    task.priority = priority;
+
+    res.json(task);
   } catch (error) {
     next(error);
   }
