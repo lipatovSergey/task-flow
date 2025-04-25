@@ -10,6 +10,8 @@ interface ColumnProps {
   onDelete: (id: Task["id"]) => void;
   activeCardId: string | null;
   setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>;
+  setTaskToEdit: React.Dispatch<React.SetStateAction<Task | null>>;
+  setIsEditTaskFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ColumnTitle = styled.h2`
@@ -39,6 +41,8 @@ const Column = ({
   onDelete,
   activeCardId,
   setActiveCardId,
+  setTaskToEdit,
+  setIsEditTaskFormOpen,
 }: ColumnProps) => {
   return (
     <ColumnWrapper>
@@ -54,6 +58,8 @@ const Column = ({
                 onDelete={onDelete}
                 activeCardId={activeCardId}
                 setActiveCardId={setActiveCardId}
+                setTaskToEdit={setTaskToEdit}
+                setIsEditTaskFormOpen={setIsEditTaskFormOpen}
               />
             ))}
         </TasksList>

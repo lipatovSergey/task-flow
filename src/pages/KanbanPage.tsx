@@ -4,6 +4,7 @@ import { mockTasks } from "../features/tasks/mockData";
 import { Task } from "../features/tasks/tasksTypes";
 import { useState, useEffect } from "react";
 import TaskAddForm from "../components/TaskAddForm";
+import TaskEditForm from "../components/TaskEditForm";
 
 const Section = styled.section`
   width: 1200px;
@@ -20,6 +21,8 @@ const statuses: Task["status"][] = ["ToDo", "InProgress", "Done"];
 
 const KanbanPage = () => {
   const [isAddTaskFormOpen, setIsAddTaskFormOpen] = useState(false);
+  const [isEditTaskFormOpen, setIsEditTaskFormOpen] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
   const [tasks, setTasks] = useState<Task[] | null>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
@@ -67,8 +70,15 @@ const KanbanPage = () => {
   };
 
   const deleteTask = (id: Task["id"]) => {
-    console.log(id);
     setTasks((prev) => (prev ? prev.filter((t) => t.id !== id) : prev));
+  };
+
+  const editTask = (updatedTask: Task) => {
+    setTasks((prev) =>
+      prev
+        ? prev.map((t) => (t.id === updatedTask.id ? updatedTask : t))
+        : prev,
+    );
   };
 
   console.log(activeCardId);
@@ -83,6 +93,14 @@ const KanbanPage = () => {
             onTaskAdd={addTask}
           />
         )}
+        {isEditTaskFormOpen && (
+          <TaskEditForm
+            task={taskToEdit}
+            isOpen={isEditTaskFormOpen}
+            setIsOpen={setIsEditTaskFormOpen}
+            onTaskEdit={editTask}
+          />
+        )}
         {statuses.map((status) => (
           <Column
             key={status}
@@ -93,6 +111,8 @@ const KanbanPage = () => {
             onDelete={deleteTask}
             activeCardId={activeCardId}
             setActiveCardId={setActiveCardId}
+            setTaskToEdit={setTaskToEdit}
+            setIsEditTaskFormOpen={setIsEditTaskFormOpen}
           />
         ))}
       </Wrapper>

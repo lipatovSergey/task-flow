@@ -6,6 +6,8 @@ interface TaskCardProps {
   onDelete: (id: Task["id"]) => void;
   activeCardId: string | null;
   setActiveCardId: React.Dispatch<React.SetStateAction<string | null>>;
+  setTaskToEdit: React.Dispatch<React.SetStateAction<Task | null>>;
+  setIsEditTaskFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskCardWrapper = styled.li`
@@ -60,9 +62,16 @@ const TaskCard = ({
   onDelete,
   activeCardId,
   setActiveCardId,
+  setTaskToEdit,
+  setIsEditTaskFormOpen,
 }: TaskCardProps) => {
   const handleDeleteBtnClick = () => {
     onDelete(task.id);
+  };
+
+  const handleTaskEditBtnClick = () => {
+    setTaskToEdit(task);
+    setIsEditTaskFormOpen(true);
   };
 
   return (
@@ -82,7 +91,13 @@ const TaskCard = ({
       </TaskCardContent>
       {task.id === activeCardId && (
         <BtnsWrapper>
-          <button type="button">✏️</button>
+          <button
+            type="button"
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={handleTaskEditBtnClick}
+          >
+            ✏️
+          </button>
           <button
             type="button"
             // must stop propagation, because of global listener. Without it global listener will work before onClick inside component
