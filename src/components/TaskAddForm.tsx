@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import type { Task } from "../features/tasks/tasksTypes";
 
-interface TaskFormProps {
+interface TaskAddFormProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onTaskAdd: (task: Task) => void;
@@ -58,7 +58,7 @@ const ErrorSpan = styled.span`
   color: #e60000;
   font-size: 12px;
 `;
-const TaskForm = ({ setIsOpen, onTaskAdd }: TaskFormProps) => {
+const TaskAddForm = ({ setIsOpen, onTaskAdd }: TaskAddFormProps) => {
   // state for errors in form fields
   const [errors, setErrors] = useState({
     title: "",
@@ -156,4 +156,4 @@ const TaskForm = ({ setIsOpen, onTaskAdd }: TaskFormProps) => {
   );
 };
 
-export default TaskForm;
+export default TaskAddForm;

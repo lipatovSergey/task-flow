@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { mockTasks } from "../features/tasks/mockData";
 import { Task } from "../features/tasks/tasksTypes";
 import { useState, useEffect } from "react";
-import TaskForm from "../components/TaskForm";
+import TaskAddForm from "../components/TaskAddForm";
 
 const Section = styled.section`
   width: 1200px;
@@ -77,7 +77,7 @@ const KanbanPage = () => {
       <Wrapper>
         <button onClick={() => setIsAddTaskFormOpen(true)}>Add Task</button>
         {isAddTaskFormOpen && (
-          <TaskForm
+          <TaskAddForm
             isOpen={isAddTaskFormOpen}
             setIsOpen={setIsAddTaskFormOpen}
             onTaskAdd={addTask}
