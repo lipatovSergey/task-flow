@@ -88,26 +88,26 @@ const TaskEditForm = ({ task, setIsOpen, onTaskEdit }: TaskEditFormProps) => {
           <div className="fields">
             <label htmlFor="title">Title</label>
             {errors.title && <ErrorSpan>{errors.title}</ErrorSpan>}
-            <input name="title" id="title" />
+            <input name="title" id="title" defaultValue={task.title} />
             <label htmlFor="description">Description</label>
             {errors.description && <ErrorSpan>{errors.description}</ErrorSpan>}
-            <input name="description" />
+            <input name="description" defaultValue={task.description} />
             <label htmlFor="status">Status</label>
             {errors.status && <ErrorSpan>{errors.status}</ErrorSpan>}
-            <select name="status" id="status">
+            <select name="status" id="status" defaultValue={task.status}>
               <option value="ToDo">To Do</option>
               <option value="InProgress">In Progress</option>
               <option value="Done">Done</option>
             </select>
             <label htmlFor="priority">Priority</label>
             {errors.priority && <ErrorSpan>{errors.priority}</ErrorSpan>}
-            <select name="priority" id="priority">
+            <select name="priority" id="priority" defaultValue={task.priority}>
               <option value="1">High</option>
               <option value="2">Regular</option>
               <option value="3">Low</option>
             </select>
           </div>
-          <button>Add Task</button>
+          <button type="submit">Edit Task</button>
         </Form>
         <CloseModalBtn onClick={() => setIsOpen(false)}>X</CloseModalBtn>
       </TaskFormModal>
