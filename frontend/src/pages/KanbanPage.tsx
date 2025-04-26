@@ -1,10 +1,10 @@
 import Column from "../components/Column";
 import styled from "styled-components";
-import { mockTasks } from "../features/tasks/mockData";
 import { Task } from "../features/tasks/tasksTypes";
 import { useState, useEffect } from "react";
 import TaskAddForm from "../components/TaskAddForm";
 import TaskEditForm from "../components/TaskEditForm";
+import { createTask, getTasks } from "../api/taskApi";
 
 const Section = styled.section`
   width: 1200px;
@@ -28,31 +28,17 @@ const KanbanPage = () => {
 
   // on first render check if there any tasks in localStorage
   useEffect(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    if (savedTasks) {
-      console.log(savedTasks);
+    const fetchTasks = async () => {
       try {
-        const parsed = JSON.parse(savedTasks);
-        // date saved as string, must get it back to Date
-        const restored = parsed.map((t: Task) => ({
-          ...t,
-          createdAt: new Date(t.createdAt),
-        }));
-        setTasks(restored);
-      } catch {
-        console.error("Failed to parse tasks from localStorage");
+        const fetchedTasks = await getTasks();
+        setTasks(fetchedTasks);
+      } catch (error) {
+        console.error("Failed to fetch tasks", error);
       }
-    } else {
-      setTasks(mockTasks);
-    }
-  }, []);
+    };
 
-  // on every change in tasks save to localStorage
-  useEffect(() => {
-    if (tasks !== null) {
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-    }
-  }, [tasks]);
+    fetchTasks();
+  }, []);
 
   // global eventListener for clicks outside of activeCardId
   useEffect(() => {
@@ -65,8 +51,13 @@ const KanbanPage = () => {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  const addTask = (task: Task) => {
-    setTasks((prev) => (prev ? [...prev, task] : [task]));
+  const addTask = async (taskData: Omit<Task, "id" | "createdAt">) => {
+    try {
+      const newTask = await createTask(taskData);
+      setTasks((prev) => (prev ? [...prev, newTask] : [newTask]));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const deleteTask = (id: Task["id"]) => {
