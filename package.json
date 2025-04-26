@@ -4,10 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently \"pnpm --prefix frontend dev\" \"pnpm --prefix backend dev\"",
+    "dev:frontend": "pnpm --prefix frontend dev",
+    "dev:backend": "pnpm --prefix backend dev",
+    "build": "pnpm --prefix frontend build && pnpm --prefix backend build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.8.1"
+  "packageManager": "pnpm@10.8.1",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
 }
