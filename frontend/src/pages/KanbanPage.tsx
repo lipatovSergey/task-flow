@@ -4,7 +4,8 @@ import { Task } from "../features/tasks/tasksTypes";
 import { useState, useEffect } from "react";
 import TaskAddForm from "../components/TaskAddForm";
 import TaskEditForm from "../components/TaskEditForm";
-import { createTask, getTasks } from "../api/taskApi";
+import { createTask, getTasks, updateTask, deleteTask } from "../api/taskApi";
+import { validateTask } from "../features/tasks/validateTask";
 
 const Section = styled.section`
   width: 1200px;
@@ -31,7 +32,10 @@ const KanbanPage = () => {
     const fetchTasks = async () => {
       try {
         const fetchedTasks = await getTasks();
-        setTasks(fetchedTasks);
+        if (Array.isArray(fetchedTasks)) {
+          fetchedTasks.forEach((task) => validateTask(task));
+          setTasks(fetchedTasks);
+        }
       } catch (error) {
         console.error("Failed to fetch tasks", error);
       }
@@ -54,25 +58,35 @@ const KanbanPage = () => {
   const addTask = async (taskData: Omit<Task, "id" | "createdAt">) => {
     try {
       const newTask = await createTask(taskData);
+      validateTask(newTask);
       setTasks((prev) => (prev ? [...prev, newTask] : [newTask]));
     } catch (error) {
       console.error(error);
     }
   };
 
-  const deleteTask = (id: Task["id"]) => {
-    setTasks((prev) => (prev ? prev.filter((t) => t.id !== id) : prev));
+  const handleTaskDelete = async (id: Task["id"]) => {
+    try {
+      await deleteTask(id);
+      setTasks((prev) => (prev ? prev.filter((t) => t.id !== id) : prev));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const editTask = (updatedTask: Task) => {
-    setTasks((prev) =>
-      prev
-        ? prev.map((t) => (t.id === updatedTask.id ? updatedTask : t))
-        : prev,
-    );
+  const editTask = async (updatedTask: Task) => {
+    try {
+      const taskAfterUpdate = await updateTask(updatedTask);
+      setTasks((prev) =>
+        prev
+          ? prev.map((t) => (t.id === taskAfterUpdate.id ? taskAfterUpdate : t))
+          : prev,
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  console.log(activeCardId);
   return (
     <Section>
       <Wrapper>
@@ -99,7 +113,7 @@ const KanbanPage = () => {
             tasks={
               tasks ? tasks.filter((task) => task.status === status) : null
             }
-            onDelete={deleteTask}
+            onDelete={handleTaskDelete}
             activeCardId={activeCardId}
             setActiveCardId={setActiveCardId}
             setTaskToEdit={setTaskToEdit}
