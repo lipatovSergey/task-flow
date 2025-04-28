@@ -21,7 +21,7 @@ const TaskCardWrapper = styled.li`
 const TaskCardContent = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #0cb8ca;
+  background-color: #1d3074;
   padding: 8px 8px;
   border-radius: 8px;
 

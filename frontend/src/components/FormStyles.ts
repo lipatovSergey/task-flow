@@ -15,8 +15,8 @@ export const BackDrop = styled.div`
 
 export const TaskFormModal = styled.div`
   position: relative;
-  padding: 8px;
-  background-color: white;
+  padding: 16px;
+  background-color: #1d3074;
   border-radius: 8px;
   max-width: 500px;
   min-height: 250px;
