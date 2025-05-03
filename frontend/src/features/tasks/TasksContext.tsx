@@ -1,69 +1,33 @@
-import {
-  createContext,
-  useReducer,
-  useContext,
-  ReactNode,
-  Dispatch,
-} from "react";
+import { createContext, useContext } from "react";
 import { Task } from "./tasksTypes";
 
-// type for task actions
-type TaskAction =
-  | { type: "SET_TASKS"; payload: Task[] }
+export type TaskAction =
   | { type: "ADD_TASK"; payload: Task }
+  | { type: "UPDATE_TASK"; payload: Task }
   | { type: "DELETE_TASK"; payload: string }
-  | { type: "UPDATE_TASK"; payload: Task };
+  | { type: "SET_TASKS"; payload: Task[] };
 
-// 🧠 Редьюсер, который описывает, как состояние изменяется в ответ на действия
-function tasksReducer(state: Task[], action: TaskAction): Task[] {
-  switch (action.type) {
-    case "SET_TASKS":
-      return action.payload;
-    case "ADD_TASK":
-      return [...state, action.payload];
-    case "DELETE_TASK":
-      return state.filter((t) => t.id !== action.payload);
-    case "UPDATE_TASK":
-      return state.map((t) =>
-        t.id === action.payload.id ? action.payload : t,
-      );
-    default:
-      return state;
-  }
+export interface TaskState {
+  tasks: Task[] | null;
 }
 
-// 📦 Начальное значение (может быть [])
-const TasksContext = createContext<Task[] | undefined>(undefined);
-const TasksDispatchContext = createContext<Dispatch<TaskAction> | undefined>(
-  undefined,
-);
+export const TaskContext = createContext<TaskState | undefined>(undefined);
+export const TaskDispatchContext = createContext<
+  React.Dispatch<TaskAction> | undefined
+>(undefined);
 
-// 💡 Компонент-провайдер оборачивает всё приложение
-export function TasksProvider({ children }: { children: ReactNode }) {
-  const [tasks, dispatch] = useReducer(tasksReducer, []);
-
-  return (
-    <TasksContext.Provider value={tasks}>
-      <TasksDispatchContext.Provider value={dispatch}>
-        {children}
-      </TasksDispatchContext.Provider>
-    </TasksContext.Provider>
-  );
-}
-
-// 👇 Хуки для использования задач и диспетчера
-export function useTasks() {
-  const context = useContext(TasksContext);
+export const useTaskState = () => {
+  const context = useContext(TaskContext);
   if (context === undefined) {
-    throw new Error("useTasks must be used within a TasksProvider");
+    throw new Error("useTaskState must be used within a TaskProvider");
   }
   return context;
-}
+};
 
-export function useTasksDispatch() {
-  const context = useContext(TasksDispatchContext);
+export const useTaskDispatch = () => {
+  const context = useContext(TaskDispatchContext);
   if (context === undefined) {
-    throw new Error("useTasksDispatch must be used within a TasksProvider");
+    throw new Error("useTaskDispatch must be used within a TaskProvider");
   }
   return context;
-}
+};
