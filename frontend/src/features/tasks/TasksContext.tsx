@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   useReducer,
   useContext,
@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { Task } from "./tasksTypes";
 
-// 🎯 Типы действий, которые может обрабатывать редьюсер
+// type for task actions
 type TaskAction =
   | { type: "SET_TASKS"; payload: Task[] }
   | { type: "ADD_TASK"; payload: Task }
