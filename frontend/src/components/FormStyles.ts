@@ -46,9 +46,11 @@ export const CloseModalBtn = styled.button`
   position: absolute;
   right: -10px;
   top: -10px;
+  border-radius: 12px;
+  background-color: #0a2a44c9;
 `;
 
 export const ErrorSpan = styled.span`
   color: #e60000;
-  font-size: 12px;
+  font-size: 14px;
 `;
