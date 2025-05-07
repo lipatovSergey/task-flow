@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import type { Task } from "../features/tasks/tasksTypes";
 
+// Интерфейс пропсов для компонента TaskCard
 interface TaskCardProps {
   task: Task;
   onDelete: (id: Task["id"]) => void;
@@ -10,6 +11,7 @@ interface TaskCardProps {
   setIsEditTaskFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// Стилизация обёртки карточки задания
 const TaskCardWrapper = styled.li`
   position: relative;
   width: 100%;
@@ -18,6 +20,7 @@ const TaskCardWrapper = styled.li`
   }
 `;
 
+// Стилизация содержимого карточки задания
 const TaskCardContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -40,6 +43,7 @@ const TaskCardContent = styled.div`
   }
 `;
 
+// Стилизация обёртки для кнопок редактирования и удаления
 const BtnsWrapper = styled.div`
   position: absolute;
   top: -8px;
@@ -65,10 +69,12 @@ const TaskCard = ({
   setTaskToEdit,
   setIsEditTaskFormOpen,
 }: TaskCardProps) => {
+  // Обработчик кнопки удаления
   const handleDeleteBtnClick = () => {
     onDelete(task.id);
   };
 
+  // Обработчик кнопки редактирования
   const handleTaskEditBtnClick = () => {
     setTaskToEdit(task);
     setIsEditTaskFormOpen(true);
@@ -76,9 +82,10 @@ const TaskCard = ({
 
   return (
     <TaskCardWrapper
-      // must stop propagation, because of global listener. Without it global listener will work before onClick inside component
+      // Останавливаем всплытие, чтобы глобальный обработчик клика не скрыл кнопки
       onMouseDown={(e) => e.stopPropagation()}
       onClick={() => {
+        // Устанавливаем текущую активную карточку только если это другая карточка
         if (activeCardId !== task.id) {
           setActiveCardId(task.id);
         }
@@ -89,19 +96,20 @@ const TaskCard = ({
         <p>{task.description}</p>
         <span>{task.createdAt.toLocaleString()}</span>
       </TaskCardContent>
+
+      {/* Кнопки редактирования и удаления отображаются только для активной карточки */}
       {task.id === activeCardId && (
         <BtnsWrapper>
           <button
             type="button"
-            onMouseDown={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()} // предотвращаем потерю фокуса
             onClick={handleTaskEditBtnClick}
           >
             ✏️
           </button>
           <button
             type="button"
-            // must stop propagation, because of global listener. Without it global listener will work before onClick inside component
-            onMouseDown={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()} // предотвращаем скрытие при удалении
             onClick={handleDeleteBtnClick}
           >
             ❌
