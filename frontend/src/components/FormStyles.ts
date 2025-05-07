@@ -46,7 +46,6 @@ export const CloseModalBtn = styled.button`
   position: absolute;
   right: -10px;
   top: -10px;
-  border-radius: 12px;
   background-color: #0a2a44c9;
 `;
 
